@@ -1,6 +1,7 @@
 package com.enndfp.view.member;
 
 import com.enndfp.pojo.Member;
+import com.enndfp.utils.JDBCUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +10,15 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
 
-
-public class MemberInfoView extends JPanel{
+/**
+ * 会员信息展示
+ *
+ * @author Enndfp
+ */
+public class MemberInfoView extends JPanel {
     private String account;
     private Member member = new Member();
-    private ArrayList<JTextField> fields =new ArrayList<>();
+    private ArrayList<JTextField> fields = new ArrayList<>();
     private JLabel memberCardIdLabel = new JLabel("会员卡号");
     private JTextField memberCardIdField = new JTextField();
 
@@ -45,15 +50,17 @@ public class MemberInfoView extends JPanel{
     private Font font = new Font("宋体", Font.BOLD, 20);
 
     public MemberInfoView(String account) {
-        setLayout(null);//绝对布局
-        this.account=account;
+        setLayout(null); // 绝对布局
+        this.account = account;
         queryMemberInfo();
 
-        memberCardIdLabel.setBounds(220, 50, 100, 30);
-        memberCardIdField.setBounds(480, 50, 150, 30);
+        memberCardIdLabel.setBounds(240, 50, 100, 30);
+        memberCardIdField.setBounds(500, 50, 150, 30);
         memberCardIdLabel.setFont(font);
         memberCardIdField.setFont(font);
-        memberCardIdField.setOpaque(false);
+        memberCardIdLabel.setForeground(Color.ORANGE);
+        memberCardIdField.setForeground(Color.ORANGE);
+        memberCardIdField.setOpaque(false); // 是否透明，true不透明，false透明
         memberCardIdField.setEditable(false);
         memberCardIdField.setBackground(new Color(0, 0, 0, 0));
         memberCardIdField.setBorder(BorderFactory.createEmptyBorder());
@@ -61,10 +68,12 @@ public class MemberInfoView extends JPanel{
         add(memberCardIdLabel);
         add(memberCardIdField);
 
-        memberNameLabel.setBounds(220, 95, 100, 30);
-        memberNameField.setBounds(480, 95, 150, 30);
+        memberNameLabel.setBounds(240, 95, 100, 30);
+        memberNameField.setBounds(500, 95, 150, 30);
         memberNameLabel.setFont(font);
         memberNameField.setFont(font);
+        memberNameLabel.setForeground(Color.ORANGE);
+        memberNameField.setForeground(Color.ORANGE);
         memberNameField.setOpaque(false);
         memberNameField.setEditable(false);
         memberNameField.setBackground(new Color(0, 0, 0, 0));
@@ -73,10 +82,12 @@ public class MemberInfoView extends JPanel{
         add(memberNameLabel);
         add(memberNameField);
 
-        memberGenderLabel.setBounds(220, 140, 100, 30);
-        memberGenderField.setBounds(480, 140, 150, 30);
+        memberGenderLabel.setBounds(240, 140, 100, 30);
+        memberGenderField.setBounds(500, 140, 150, 30);
         memberGenderLabel.setFont(font);
         memberGenderField.setFont(font);
+        memberGenderLabel.setForeground(Color.ORANGE);
+        memberGenderField.setForeground(Color.ORANGE);
         memberGenderField.setOpaque(false);
         memberGenderField.setEditable(false);
         memberGenderField.setBackground(new Color(0, 0, 0, 0));
@@ -85,10 +96,12 @@ public class MemberInfoView extends JPanel{
         add(memberGenderLabel);
         add(memberGenderField);
 
-        memberAgeLabel.setBounds(220, 185, 100, 30);
-        memberAgeField.setBounds(480, 185, 150, 30);
+        memberAgeLabel.setBounds(240, 185, 100, 30);
+        memberAgeField.setBounds(500, 185, 150, 30);
         memberAgeLabel.setFont(font);
         memberAgeField.setFont(font);
+        memberAgeLabel.setForeground(Color.ORANGE);
+        memberAgeField.setForeground(Color.ORANGE);
         memberAgeField.setOpaque(false);
         memberAgeField.setEditable(false);
         memberAgeField.setBackground(new Color(0, 0, 0, 0));
@@ -97,10 +110,12 @@ public class MemberInfoView extends JPanel{
         add(memberAgeLabel);
         add(memberAgeField);
 
-        memberHeightLabel.setBounds(220, 230, 100, 30);
-        memberHeightField.setBounds(480, 230, 150, 30);
+        memberHeightLabel.setBounds(240, 230, 100, 30);
+        memberHeightField.setBounds(500, 230, 150, 30);
         memberHeightLabel.setFont(font);
         memberHeightField.setFont(font);
+        memberHeightLabel.setForeground(Color.ORANGE);
+        memberHeightField.setForeground(Color.ORANGE);
         memberHeightField.setOpaque(false);
         memberHeightField.setEditable(false);
         memberHeightField.setBackground(new Color(0, 0, 0, 0));
@@ -109,10 +124,12 @@ public class MemberInfoView extends JPanel{
         add(memberHeightLabel);
         add(memberHeightField);
 
-        memberWeightLabel.setBounds(220, 275, 100, 30);
-        memberWeightField.setBounds(480, 275, 150, 30);
+        memberWeightLabel.setBounds(240, 275, 100, 30);
+        memberWeightField.setBounds(500, 275, 150, 30);
         memberWeightLabel.setFont(font);
         memberWeightField.setFont(font);
+        memberWeightLabel.setForeground(Color.ORANGE);
+        memberWeightField.setForeground(Color.ORANGE);
         memberWeightField.setOpaque(false);
         memberWeightField.setEditable(false);
         memberWeightField.setBackground(new Color(0, 0, 0, 0));
@@ -121,10 +138,12 @@ public class MemberInfoView extends JPanel{
         add(memberWeightLabel);
         add(memberWeightField);
 
-        memberPhoneLabel.setBounds(220, 320, 100, 30);
-        memberPhoneField.setBounds(480, 320, 150, 30);
+        memberPhoneLabel.setBounds(240, 320, 100, 30);
+        memberPhoneField.setBounds(500, 320, 150, 30);
         memberPhoneLabel.setFont(font);
         memberPhoneField.setFont(font);
+        memberPhoneLabel.setForeground(Color.ORANGE);
+        memberPhoneField.setForeground(Color.ORANGE);
         memberPhoneField.setOpaque(false);
         memberPhoneField.setEditable(false);
         memberPhoneField.setBackground(new Color(0, 0, 0, 0));
@@ -133,10 +152,12 @@ public class MemberInfoView extends JPanel{
         add(memberPhoneLabel);
         add(memberPhoneField);
 
-        memberCardTimeLabel.setBounds(220, 365, 100, 30);
-        memberCardTimeField.setBounds(480, 365, 150, 30);
+        memberCardTimeLabel.setBounds(240, 365, 100, 30);
+        memberCardTimeField.setBounds(500, 365, 150, 30);
         memberCardTimeLabel.setFont(font);
         memberCardTimeField.setFont(font);
+        memberCardTimeLabel.setForeground(Color.ORANGE);
+        memberCardTimeField.setForeground(Color.ORANGE);
         memberCardTimeField.setOpaque(false);
         memberCardTimeField.setEditable(false);
         memberCardTimeField.setBackground(new Color(0, 0, 0, 0));
@@ -145,10 +166,12 @@ public class MemberInfoView extends JPanel{
         add(memberCardTimeLabel);
         add(memberCardTimeField);
 
-        memberCourseLabel.setBounds(220, 410, 100, 30);
-        memberCourseField.setBounds(480, 410, 150, 30);
+        memberCourseLabel.setBounds(240, 410, 100, 30);
+        memberCourseField.setBounds(500, 410, 150, 30);
         memberCourseLabel.setFont(font);
         memberCourseField.setFont(font);
+        memberCourseLabel.setForeground(Color.ORANGE);
+        memberCourseField.setForeground(Color.ORANGE);
         memberCourseField.setOpaque(false);
         memberCourseField.setEditable(false);
         memberCourseField.setBackground(new Color(0, 0, 0, 0));
@@ -157,7 +180,7 @@ public class MemberInfoView extends JPanel{
         add(memberCourseLabel);
         add(memberCourseField);
 
-        updateButton.setBounds(290, 480, 200, 40);
+        updateButton.setBounds(310, 500, 200, 40);
         updateButton.setFont(font);
         add(updateButton);
 
@@ -173,7 +196,7 @@ public class MemberInfoView extends JPanel{
                 fields.add(memberCourseField);
 
                 queryMemberInfo();
-                new ModifyMemberView(member,fields);
+                new ModifyMemberView(member, fields);
             }
         });
 
@@ -183,19 +206,21 @@ public class MemberInfoView extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Image image = new ImageIcon("D:\\图片\\gym4.jpg").getImage(); // 背景图片路径
+        Image image = new ImageIcon("src/com/enndfp/image/member.jpg").getImage(); // 背景图片路径
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }
-    public void queryMemberInfo(){
+
+    public void queryMemberInfo() {
         Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+            connection = JDBCUtil.getConnection();
             String sql = "select * from member where member_account=?";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sql);
             ps.setString(1, account);
 
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 member.setMemberAccount(Integer.valueOf(rs.getString(1)));
                 member.setMemberPassword(rs.getString(2));
@@ -219,16 +244,10 @@ public class MemberInfoView extends JPanel{
                 memberCardTimeField.setText(member.getCardTime());
                 memberCourseField.setText(String.valueOf(member.getCardNextClass()));
             }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            JDBCUtil.getClose(connection, ps, rs);
         }
     }
 }

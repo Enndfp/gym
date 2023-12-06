@@ -5,12 +5,33 @@ package com.enndfp.pojo;
  * @date 2023/3/17
  */
 public class Employee {
+    /**
+     * 员工号
+     */
     private Integer employeeAccount;
+    /**
+     * 姓名
+     */
     private String employeeName;
+    /**
+     * 性别
+     */
     private String employeeGender;
+    /**
+     * 年龄
+     */
     private Integer employeeAge;
+    /**
+     * 入职时间
+     */
     private String entryTime;
+    /**
+     * 职务
+     */
     private String staff;
+    /**
+     * 备注信息
+     */
     private String employeeMessage;
 
     public Integer getEmployeeAccount() {

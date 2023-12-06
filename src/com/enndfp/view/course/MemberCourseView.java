@@ -1,6 +1,7 @@
 package com.enndfp.view.course;
 
 import com.enndfp.pojo.Course;
+import com.enndfp.utils.JDBCUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -23,17 +24,17 @@ import java.util.Vector;
  * @date 2023/3/19
  */
 public class MemberCourseView extends JPanel {
-    //滚动面板
+    // 滚动面板
     private JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     public JTable table = new JTable();
     private JButton deleteButton = new JButton("退课");
 
     public MemberCourseView(String account) {
         setSize(840, 400);
-        setLayout(null);//绝对布局
+        setLayout(null); // 绝对布局
 
         scrollPane.setBounds(11, 120, 840, 300);
-        scrollPane.getViewport().add(table);//把表格加入到滚动面板中
+        scrollPane.getViewport().add(table); // 把表格加入到滚动面板中
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // 调整单元格滚动速度
         scrollPane.getVerticalScrollBar().setBlockIncrement(64); // 调整页面滚动速度
 
@@ -46,7 +47,8 @@ public class MemberCourseView extends JPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int row = table.getSelectedRow();//得到用户选中了哪一行
+                // 得到用户选中了哪一行
+                int row = table.getSelectedRow();
                 if (row == -1) {
                     JOptionPane.showMessageDialog(null, "请先选中");
                     return;
@@ -54,62 +56,32 @@ public class MemberCourseView extends JPanel {
 
                 int count = JOptionPane.showConfirmDialog(null, "确认退选该课程吗?", "退课界面", JOptionPane.YES_NO_OPTION);
                 if (count == 0) {
-                    Connection connection = null;
-                    //选中行的第一列  就是课程编号
+                    // 选中行的第一列  就是课程编号
                     String classId = (String) table.getValueAt(row, 0);
                     String classBegin = (String) table.getValueAt(row, 2);
                     String str = null;
 
+                    Connection connection = null;
+                    PreparedStatement ps = null;
+                    ResultSet rs = null;
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                        connection = JDBCUtil.getConnection();
                         String sql = "SELECT class_time from class_table where class_id = ?";
-                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps = connection.prepareStatement(sql);
                         ps.setString(1, classId);
-                        ResultSet rs = ps.executeQuery();
+                        rs = ps.executeQuery();
 
                         if (rs.next()) {
                             str = rs.getString(1);
                         }
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                    try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
-                        String sql = "delete from class_order where class_id = ? and member_account = ?";
-                        PreparedStatement ps = connection.prepareStatement(sql);
-                        ps.setString(1, classId);
-                        ps.setString(2, account);
-                        int n = ps.executeUpdate();
-                        if (n > 0) {//删除成功   数据库删除成功
-                            //从界面中删除
-                            ((DefaultTableModel) table.getModel()).removeRow(row);
-
-                            JOptionPane.showMessageDialog(null, "退课成功");
-                        }
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        JDBCUtil.getClose(connection, ps, rs);
                     }
 
                     Integer classTime = Integer.valueOf(str.substring(0, str.indexOf("分钟")));
-                    //获取当前日期
+                    // 获取当前日期
                     Date date = new Date();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
                     String nowTime = simpleDateFormat.format(date);
@@ -122,17 +94,16 @@ public class MemberCourseView extends JPanel {
                     int result = classBegin2.compareTo(nowTime2);
                     try {
                         if (result > 0) {
-                            //说明没有过开课时间，退还会员课时
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                            // 说明没有过开课时间，退还会员课时
+                            connection = JDBCUtil.getConnection();
 
                             // 创建一个PreparedStatement对象
-                            PreparedStatement ps = connection.prepareStatement("UPDATE member SET card_next_class=? WHERE member_account = ?");
+                            ps = connection.prepareStatement("UPDATE member SET card_next_class=? WHERE member_account = ?");
 
                             String sql = "SELECT * FROM member WHERE member_account = ?";
                             PreparedStatement ps2 = connection.prepareStatement(sql);
                             ps2.setString(1, String.valueOf(account));
-                            ResultSet rs = ps2.executeQuery();
+                            rs = ps2.executeQuery();
 
                             if (rs.next()) {
                                 String str2 = rs.getString(11);
@@ -151,16 +122,30 @@ public class MemberCourseView extends JPanel {
                             }
                             ps2.close();
                         }
-                    } catch (ClassNotFoundException ex) {
-                        ex.printStackTrace();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
+                        JDBCUtil.getClose(connection, ps, rs);
+                    }
+
+                    try {
+                        connection = JDBCUtil.getConnection();
+                        String sql = "delete from class_order where class_id = ? and member_account = ?";
+                        ps = connection.prepareStatement(sql);
+                        ps.setString(1, classId);
+                        ps.setString(2, account);
+                        int n = ps.executeUpdate();
+                        // 删除成功
+                        if (n > 0) {
+                            // 从界面中删除
+                            ((DefaultTableModel) table.getModel()).removeRow(row);
+
+                            JOptionPane.showMessageDialog(null, "退课成功");
                         }
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    } finally {
+                        JDBCUtil.getClose(connection, ps, rs);
                     }
                 }
             }
@@ -171,7 +156,7 @@ public class MemberCourseView extends JPanel {
     }
 
     public void selectCourse(String account) {
-        Vector<String> thVector = new Vector<>();//表头集合
+        Vector<String> thVector = new Vector<>(); // 表头集合
         thVector.add("编号");
         thVector.add("名称");
         thVector.add("时间");
@@ -180,13 +165,14 @@ public class MemberCourseView extends JPanel {
         Vector<Vector<String>> dataVector = new Vector<>();
 
         Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+            connection = JDBCUtil.getConnection();
             String sql = "SELECT * from class_order where member_account=? order by class_id";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sql);
             ps.setString(1, account);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Vector<String> vector = new Vector<>();
                 vector.add(rs.getString(2));
@@ -195,26 +181,20 @@ public class MemberCourseView extends JPanel {
                 vector.add(rs.getString(4));
                 dataVector.add(vector);
             }
-        } catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
+            JDBCUtil.getClose(connection, ps, rs);
         }
 
-        //构建表模型
+        // 构建表模型
         DefaultTableModel defaultTableModel = new DefaultTableModel(dataVector, thVector);
-        table.setModel(defaultTableModel);//告知表格  要显示的数据
+        table.setModel(defaultTableModel); // 告知表格  要显示的数据
 
-        //表格的数据居中
+        // 表格的数据居中
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setHorizontalAlignment(JLabel.CENTER);
-        //给表格指定渲染器
+        // 给表格指定渲染器
         table.setDefaultRenderer(Object.class, cellRenderer);
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
@@ -230,7 +210,6 @@ public class MemberCourseView extends JPanel {
         TableColumn thirdColumn = columnModel.getColumn(2);
         firstColumn.setPreferredWidth(30);
         thirdColumn.setPreferredWidth(150);
-
     }
 
     // 创建一个只读的单元格编辑器
@@ -244,7 +223,7 @@ public class MemberCourseView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Image image = new ImageIcon("D:\\图片\\gym4.jpg").getImage(); // 背景图片路径
+        Image image = new ImageIcon("src/com/enndfp/image/member.jpg").getImage(); // 背景图片路径
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }
 }

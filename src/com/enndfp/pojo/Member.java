@@ -5,16 +5,49 @@ package com.enndfp.pojo;
  * @date 2023/3/11
  */
 public class Member {
+    /**
+     * 账号
+     */
     private Integer memberAccount;
+    /**
+     * 密码
+     */
     private String memberPassword;
+    /**
+     * 姓名
+     */
     private String memberName;
+    /**
+     * 性别
+     */
     private String memberGender;
+    /**
+     * 年龄
+     */
     private Integer memberAge;
+    /**
+     * 身高
+     */
     private Integer memberHeight;
+    /**
+     * 体重
+     */
     private Integer memberWeight;
+    /**
+     * 手机号
+     */
     private String memberPhone;
+    /**
+     * 办卡时间
+     */
     private String cardTime;
+    /**
+     * 购买课时
+     */
     private Integer cardClass;
+    /**
+     * 剩余课时
+     */
     private Integer cardNextClass;
 
     public Integer getMemberAccount() {

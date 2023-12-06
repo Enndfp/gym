@@ -13,7 +13,7 @@ import java.util.Vector;
  * @date 2023/3/18
  */
 public class SelectMemberOrderView extends JDialog {
-    //滚动面板
+    // 滚动面板
     private JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     public JTable table = new JTable();
     private static final Font DEFAULT_FONT = new Font("黑体", Font.BOLD, 15);
@@ -31,21 +31,21 @@ public class SelectMemberOrderView extends JDialog {
         setTitle("查看报名信息");
         setSize(400, 480);
         setLocationRelativeTo(null);
-        setModal(true);//设置为模式对话框
+        setModal(true); // 设置为模式对话框
 
         // 创建一个继承自JPanel的匿名类，并重写它的paintComponent方法来绘制背景图片
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image image = new ImageIcon("D:\\图片\\gym3.jpg").getImage(); // 背景图片路径
+                Image image = new ImageIcon("src/com/enndfp/image/editor.jpg").getImage(); // 背景图片路径
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
         panel.setLayout(null);
 
         scrollPane.setBounds(10, 180, 360, 150);
-        scrollPane.getViewport().add(table);//把表格加入到滚动面板中
+        scrollPane.getViewport().add(table); // 把表格加入到滚动面板中
 
         classIdLabel.setBounds(80, 40, 60, 20);
         panel.add(classIdLabel);
@@ -74,18 +74,18 @@ public class SelectMemberOrderView extends JDialog {
         classBeginField.setEditable(false);
         panel.add(classBeginField);
 
-        Vector<String> thVector = new Vector<>();//表头集合
+        Vector<String> thVector = new Vector<>(); // 表头集合
         thVector.add("会员卡号");
         thVector.add("会员名称");
 
-        //构建表模型
+        // 构建表模型
         DefaultTableModel defaultTableModel = new DefaultTableModel(dataVector, thVector);
-        table.setModel(defaultTableModel);//告知表格  要显示的数据
+        table.setModel(defaultTableModel); // 告知表格  要显示的数据
 
-        //表格的数据居中
+        // 表格的数据居中
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setHorizontalAlignment(JLabel.CENTER);
-        //给表格指定渲染器
+        // 给表格指定渲染器
         table.setDefaultRenderer(Object.class, cellRenderer);
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);

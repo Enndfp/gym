@@ -5,10 +5,25 @@ package com.enndfp.pojo;
  * @date 2023/3/17
  */
 public class Equipment {
+    /**
+     * id
+     */
     private Integer equipmentId;
+    /**
+     * 名称
+     */
     private String equipmentName;
+    /**
+     * 位置
+     */
     private String equipmentLocation;
+    /**
+     * 状态
+     */
     private String equipmentStatus;
+    /**
+     * 备注
+     */
     private String equipmentMessage;
 
     public Integer getEquipmentId() {

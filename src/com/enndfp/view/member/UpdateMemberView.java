@@ -1,6 +1,7 @@
 package com.enndfp.view.member;
 
 import com.enndfp.pojo.Member;
+import com.enndfp.utils.JDBCUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,14 +15,12 @@ import java.sql.*;
 /**
  * @author Enndfp
  * @date 2023/3/15
+ * 管理员修改会员界面
  */
 public class UpdateMemberView extends JDialog {
     private static final Font DEFAULT_FONT = new Font("黑体", Font.BOLD, 15);
     private JLabel memberCardIdLabel = new JLabel("会员卡号");
     private JTextField memberCardIdField = new JTextField();
-
-    private JLabel memberPasswordLabel = new JLabel("密码");
-    private JTextField memberPasswordField = new JTextField();
 
     private JLabel memberNameLabel = new JLabel("姓名");
     private JTextField memberNameField = new JTextField();
@@ -49,52 +48,43 @@ public class UpdateMemberView extends JDialog {
         setTitle("修改会员信息");
         setSize(400, 460);
         setLocationRelativeTo(null);
-        setModal(true);//设置为模式对话框
+        setModal(true); // 设置为模式对话框
 
         // 创建一个继承自JPanel的匿名类，并重写它的paintComponent方法来绘制背景图片
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image image = new ImageIcon("D:\\图片\\gym3.jpg").getImage(); // 背景图片路径
+                Image image = new ImageIcon("src/com/enndfp/image/editor.jpg").getImage(); // 背景图片路径
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
         panel.setLayout(null);
 
-        memberCardIdLabel.setBounds(100, 40, 60, 20);
+        memberCardIdLabel.setBounds(100, 50, 60, 20);
         panel.add(memberCardIdLabel);
-        memberCardIdField.setBounds(180, 40, 100, 20);
+        memberCardIdField.setBounds(180, 50, 100, 20);
         memberCardIdField.setText(String.valueOf(member.getMemberAccount()));
         memberCardIdField.setFont(DEFAULT_FONT);
         memberCardIdField.setMargin(new Insets(0, 8, 0, 0));
         memberCardIdField.setEditable(false);
         panel.add(memberCardIdField);
 
-        memberPasswordLabel.setBounds(100, 80, 60, 20);
-        panel.add(memberPasswordLabel);
-        memberPasswordField.setBounds(180, 80, 100, 20);
-        memberPasswordField.setText(member.getMemberPassword());
-        memberPasswordField.setFont(DEFAULT_FONT);
-        memberPasswordField.setMargin(new Insets(0, 8, 0, 0));
-        memberPasswordField.setEditable(false);
-        panel.add(memberPasswordField);
-
-        memberNameLabel.setBounds(100, 120, 60, 20);
+        memberNameLabel.setBounds(100, 90, 60, 20);
         panel.add(memberNameLabel);
-        memberNameField.setBounds(180, 120, 100, 20);
+        memberNameField.setBounds(180, 90, 100, 20);
         memberNameField.setText(member.getMemberName());
         memberNameField.setMargin(new Insets(0, 8, 0, 0));
         memberNameField.setFont(DEFAULT_FONT);
         panel.add(memberNameField);
 
-        memberGenderLabel.setBounds(100, 160, 60, 20);
+        memberGenderLabel.setBounds(100, 130, 60, 20);
         panel.add(memberGenderLabel);
-        maleButton.setBounds(180, 160, 50, 20);
+        maleButton.setBounds(180, 130, 50, 20);
         panel.add(maleButton);
-        femaleButton.setBounds(240, 160, 50, 20);
+        femaleButton.setBounds(240, 130, 50, 20);
         panel.add(femaleButton);
-        ButtonGroup buttonGroup = new ButtonGroup();//逻辑分组
+        ButtonGroup buttonGroup = new ButtonGroup(); // 逻辑分组
         buttonGroup.add(maleButton);
         buttonGroup.add(femaleButton);
         maleButton.setSelected(true);
@@ -102,41 +92,41 @@ public class UpdateMemberView extends JDialog {
             femaleButton.setSelected(true);
         }
 
-        memberAgeLabel.setBounds(100, 200, 60, 20);
+        memberAgeLabel.setBounds(100, 170, 60, 20);
         panel.add(memberAgeLabel);
-        memberAgeField.setBounds(180, 200, 100, 20);
+        memberAgeField.setBounds(180, 170, 100, 20);
         memberAgeField.setFont(DEFAULT_FONT);
         memberAgeField.setMargin(new Insets(0, 8, 0, 0));
         memberAgeField.setText(String.valueOf(member.getMemberAge()));
         panel.add(memberAgeField);
 
-        memberCourseLabel.setBounds(100, 240, 60, 20);
+        memberCourseLabel.setBounds(100, 210, 60, 20);
         panel.add(memberCourseLabel);
-        memberCourseField.setBounds(180, 240, 100, 20);
+        memberCourseField.setBounds(180, 210, 100, 20);
         memberCourseField.setMargin(new Insets(0, 8, 0, 0));
         memberCourseField.setFont(DEFAULT_FONT);
         memberCourseField.setText(String.valueOf(member.getCardClass()));
         panel.add(memberCourseField);
 
-        memberCourseLabel2.setBounds(100, 280, 60, 20);
+        memberCourseLabel2.setBounds(100, 250, 60, 20);
         panel.add(memberCourseLabel2);
-        memberCourseField2.setBounds(180, 280, 100, 20);
+        memberCourseField2.setBounds(180, 250, 100, 20);
         memberCourseField2.setMargin(new Insets(0, 8, 0, 0));
         memberCourseField2.setFont(DEFAULT_FONT);
         memberCourseField2.setText(String.valueOf(member.getCardNextClass()));
         panel.add(memberCourseField2);
 
-        memberPhoneLabel.setBounds(100, 320, 60, 20);
+        memberPhoneLabel.setBounds(100, 290, 60, 20);
         panel.add(memberPhoneLabel);
-        memberPhoneField.setBounds(180, 320, 100, 20);
+        memberPhoneField.setBounds(180, 290, 100, 20);
         memberPhoneField.setFont(DEFAULT_FONT);
         memberPhoneField.setMargin(new Insets(0, 8, 0, 0));
         memberPhoneField.setText(String.valueOf(member.getMemberPhone()));
-        checkPhoneLabel.setBounds(290, 320, 50, 20);
+        checkPhoneLabel.setBounds(290, 290, 50, 20);
         panel.add(checkPhoneLabel);
         panel.add(memberPhoneField);
 
-        updateButton.setBounds(150, 370, 100, 30);
+        updateButton.setBounds(150, 340, 100, 30);
         updateButton.setFont(new Font("黑体", Font.BOLD, 13));
         panel.add(updateButton);
 
@@ -148,11 +138,11 @@ public class UpdateMemberView extends JDialog {
 
             @Override
             public void focusLost(FocusEvent e) {
-                String emptel = memberPhoneField.getText();//得到用户填写的联系电话
-                if (emptel.matches("1[3-9]\\d{9}")) {
+                String phone = memberPhoneField.getText(); // 得到用户填写的联系电话
+                if (phone.matches("1[3-9]\\d{9}")) {
                     checkPhoneLabel.setText("√");
                     checkPhoneLabel.setFont(new Font("宋体", Font.BOLD, 20));
-                    checkPhoneLabel.setForeground(Color.GREEN);//设置字体颜色
+                    checkPhoneLabel.setForeground(Color.GREEN); // 设置字体颜色
                 } else {
                     checkPhoneLabel.setText("×");
                     checkPhoneLabel.setFont(new Font("宋体", Font.BOLD, 15));
@@ -170,7 +160,6 @@ public class UpdateMemberView extends JDialog {
                     JOptionPane.showMessageDialog(null, "请填写正确信息!");
                 } else {
                     String memberAccount = String.valueOf(member.getMemberAccount());
-                    String memberPassword = member.getMemberPassword();
                     String memberName = memberNameField.getText();
                     String memberAge = memberAgeField.getText();
                     String memberCourse = memberCourseField.getText();
@@ -182,37 +171,37 @@ public class UpdateMemberView extends JDialog {
                     }
 
                     Connection connection = null;
+                    PreparedStatement ps = null;
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
-                        String sql = "update member set member_account=?,member_password=?,member_name=?,member_gender=?," +
+                        connection = JDBCUtil.getConnection();
+                        String sql = "update member set member_account=?,member_name=?,member_gender=?," +
                                 "member_age=?,member_phone=?,card_class=?,card_next_class=? WHERE member_account =?";
 
-                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps = connection.prepareStatement(sql);
                         ps.setString(1, memberAccount);
-                        ps.setString(2, memberPassword);
-                        ps.setString(3, memberName);
-                        ps.setString(4, memberGender);
-                        ps.setString(5, memberAge);
-                        ps.setString(6, memberPhone);
-                        ps.setString(7, memberCourse);
-                        ps.setString(8, memberCourse2);
-                        ps.setString(9, memberAccount);
+                        ps.setString(2, memberName);
+                        ps.setString(3, memberGender);
+                        ps.setString(4, memberAge);
+                        ps.setString(5, memberPhone);
+                        ps.setString(6, memberCourse);
+                        ps.setString(7, memberCourse2);
+                        ps.setString(8, memberAccount);
 
                         int n = ps.executeUpdate();
                         if (n == 1) {
                             JOptionPane.showMessageDialog(null, "修改成功");
                             dispose();
 
-                            //刷新表数据
+                            // 刷新表数据
                             defaultTableModel.setRowCount(0);
                             Connection connection2 = null;
+                            PreparedStatement ps2 = null;
+                            ResultSet rs = null;
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                connection2 = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                                connection2 = JDBCUtil.getConnection();
                                 String sql2 = "SELECT * FROM member";
-                                PreparedStatement ps2 = connection2.prepareStatement(sql2);
-                                ResultSet rs = ps2.executeQuery();
+                                ps2 = connection2.prepareStatement(sql2);
+                                rs = ps2.executeQuery();
                                 while (rs.next()) {
                                     // 将查询结果添加到表模型中
                                     defaultTableModel.addRow(new Object[]{
@@ -226,31 +215,19 @@ public class UpdateMemberView extends JDialog {
                                             rs.getString(9)
                                     });
                                 }
-                            } catch (ClassNotFoundException ex) {
-                                throw new RuntimeException(ex);
                             } catch (SQLException ex) {
                                 throw new RuntimeException(ex);
                             } finally {
-                                try {
-                                    connection2.close();
-                                    defaultTableModel.fireTableDataChanged();
-                                } catch (SQLException ex) {
-                                    throw new RuntimeException(ex);
-                                }
+                                JDBCUtil.getClose(connection2, ps2, rs);
+                                defaultTableModel.fireTableDataChanged(); // 刷新数据
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "修改失败");
                         }
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
                     } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                        ex.printStackTrace();
                     } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        JDBCUtil.getClose(connection, ps, null);
                     }
                 }
             }

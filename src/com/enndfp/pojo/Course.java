@@ -5,10 +5,25 @@ package com.enndfp.pojo;
  * @date 2023/3/18
  */
 public class Course {
+    /**
+     * id
+     */
     private Integer classId;
+    /**
+     * 课程名
+     */
     private String className;
+    /**
+     * 课程开始时间
+     */
     private String classBegin;
+    /**
+     * 课程时长
+     */
     private String classTime;
+    /**
+     * 课程教练
+     */
     private String classCoach;
 
     public Integer getClassId() {

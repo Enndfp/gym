@@ -1,22 +1,29 @@
 package com.enndfp.view;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
  * @author Enndfp
  * @date 2023/3/12
+ * 主界面
  */
 public class MainView extends JPanel {
     private JLabel label;
 
     public MainView() {
-        ImageIcon image = new ImageIcon("D:\\图片\\gym.jpg"); // 背景图片路径
         label = new JLabel("欢迎您，管理员");
-        label.setFont(new Font("宋体", Font.BOLD, 50)); // 设置字体样式
-        label.setForeground(Color.YELLOW); // 设置字体颜色
+        label.setFont(new Font("宋体", Font.BOLD, 80)); // 设置字体样式
+        label.setForeground(Color.ORANGE); // 设置字体颜色
         label.setHorizontalAlignment(JLabel.CENTER); // 水平居中
         label.setVerticalAlignment(JLabel.CENTER); // 垂直居中
+        // 在标签的下方添加空白区域
+        int top = 0;
+        int left = 0;
+        int bottom = 150;
+        int right = 0;
+        label.setBorder(new EmptyBorder(top, left, bottom, right));
         setLayout(new BorderLayout());
         add(label, BorderLayout.CENTER);
     }
@@ -24,7 +31,7 @@ public class MainView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Image image = new ImageIcon("D:\\图片\\gym.jpg").getImage(); // 背景图片路径
+        Image image = new ImageIcon("src/com/enndfp/image/main.png").getImage(); // 背景图片路径
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }
 

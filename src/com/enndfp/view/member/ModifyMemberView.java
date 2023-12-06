@@ -1,6 +1,7 @@
 package com.enndfp.view.member;
 
 import com.enndfp.pojo.Member;
+import com.enndfp.utils.JDBCUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,12 +9,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
  * @author Enndfp
  * @date 2023/3/20
+ * 会员修改个人信息
  */
 public class ModifyMemberView extends JDialog {
     private static final Font DEFAULT_FONT = new Font("黑体", Font.BOLD, 15);
@@ -53,14 +57,14 @@ public class ModifyMemberView extends JDialog {
         setTitle("修改个人信息");
         setSize(400, 500);
         setLocationRelativeTo(null);
-        setModal(true);//设置为模式对话框
+        setModal(true); // 设置为模式对话框
 
         // 创建一个继承自JPanel的匿名类，并重写它的paintComponent方法来绘制背景图片
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image image = new ImageIcon("D:\\图片\\gym3.jpg").getImage(); // 背景图片路径
+                Image image = new ImageIcon("src/com/enndfp/image/editor.jpg").getImage(); // 背景图片路径
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -158,11 +162,11 @@ public class ModifyMemberView extends JDialog {
 
             @Override
             public void focusLost(FocusEvent e) {
-                String emptel = memberPhoneField.getText();//得到用户填写的联系电话
-                if (emptel.matches("1[3-9]\\d{9}")) {
+                String phone = memberPhoneField.getText(); // 得到用户填写的联系电话
+                if (phone.matches("1[3-9]\\d{9}")) {
                     checkPhoneLabel.setText("√");
                     checkPhoneLabel.setFont(new Font("宋体", Font.BOLD, 20));
-                    checkPhoneLabel.setForeground(Color.GREEN);//设置字体颜色
+                    checkPhoneLabel.setForeground(Color.GREEN); // 设置字体颜色
                 } else {
                     checkPhoneLabel.setText("×");
                     checkPhoneLabel.setFont(new Font("宋体", Font.BOLD, 15));
@@ -199,13 +203,13 @@ public class ModifyMemberView extends JDialog {
                     }
 
                     Connection connection = null;
+                    PreparedStatement ps = null;
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                        connection = JDBCUtil.getConnection();
                         String sql = "update member set member_account=?,member_password=?,member_name=?,member_gender=?," +
                                 "member_age=?,member_height=?,member_weight=?,member_phone=?,card_class=?,card_next_class=? WHERE member_account =?";
 
-                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps = connection.prepareStatement(sql);
                         ps.setString(1, memberAccount);
                         ps.setString(2, memberPassword);
                         ps.setString(3, memberName);
@@ -233,16 +237,10 @@ public class ModifyMemberView extends JDialog {
                         } else {
                             JOptionPane.showMessageDialog(null, "修改失败");
                         }
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
                     } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                        ex.printStackTrace();
                     } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        JDBCUtil.getClose(connection, ps, null);
                     }
                 }
             }

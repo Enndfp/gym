@@ -1,5 +1,7 @@
 package com.enndfp.view.member;
 
+import com.enndfp.utils.JDBCUtil;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,7 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -15,6 +20,7 @@ import java.util.UUID;
 /**
  * @author Enndfp
  * @date 2023/3/13
+ * 添加会员界面
  */
 public class AddMemberView extends JDialog {
     // 定义所有文本框和单选按钮的初始提示文字和默认属性
@@ -55,14 +61,14 @@ public class AddMemberView extends JDialog {
         setTitle("添加会员信息");
         setSize(400, 440);
         setLocationRelativeTo(null);
-        setModal(true);//设置为模式对话框
+        setModal(true); // 设置为模式对话框
 
         // 创建一个继承自JPanel的匿名类，并重写它的paintComponent方法来绘制背景图片
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image image = new ImageIcon("D:\\图片\\gym3.jpg").getImage(); // 背景图片路径
+                Image image = new ImageIcon("src/com/enndfp/image/editor.jpg").getImage(); // 背景图片路径
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -269,7 +275,7 @@ public class AddMemberView extends JDialog {
                         memberGender = "女";
                     }
 
-                    //卡号随机生成
+                    // 卡号随机生成
                     String memberAccount = "2023";
                     UUID uuid = UUID.randomUUID();
                     int hashCode = uuid.hashCode();
@@ -281,22 +287,22 @@ public class AddMemberView extends JDialog {
                     }
                     memberAccount += fiveDigitCode;
 
-                    //初始密码
+                    // 初始密码
                     String memberPassword = "123456";
 
-                    //获取当前日期
+                    // 获取当前日期
                     Date date = new Date();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String cardTime = simpleDateFormat.format(date);
 
                     Connection connection = null;
+                    PreparedStatement ps = null;
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                        connection = JDBCUtil.getConnection();
                         String sql = "insert into member(member_account,member_password,member_name,member_gender," +
                                 "member_age,member_phone,card_time,card_class,card_next_class) values(?,?,?,?,?,?,?,?,?)";
 
-                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps = connection.prepareStatement(sql);
                         ps.setString(1, memberAccount);
                         ps.setString(2, memberPassword);
                         ps.setString(3, memberName);
@@ -312,15 +318,16 @@ public class AddMemberView extends JDialog {
                             JOptionPane.showMessageDialog(null, "添加成功");
                             dispose();
 
-                            //刷新表数据
+                            // 刷新表数据
                             defaultTableModel.setRowCount(0);
                             Connection connection2 = null;
+                            PreparedStatement ps2 = null;
+                            ResultSet rs = null;
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                connection2 = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                                connection2 = JDBCUtil.getConnection();
                                 String sql2 = "SELECT * FROM member";
-                                PreparedStatement ps2 = connection2.prepareStatement(sql2);
-                                ResultSet rs = ps2.executeQuery();
+                                ps2 = connection2.prepareStatement(sql2);
+                                rs = ps2.executeQuery();
                                 while (rs.next()) {
                                     // 将查询结果添加到表模型中
                                     defaultTableModel.addRow(new Object[]{
@@ -334,39 +341,25 @@ public class AddMemberView extends JDialog {
                                             rs.getString(9)
                                     });
                                 }
-                            } catch (ClassNotFoundException ex) {
-                                throw new RuntimeException(ex);
                             } catch (SQLException ex) {
                                 throw new RuntimeException(ex);
                             } finally {
-                                try {
-                                    connection2.close();
-                                    defaultTableModel.fireTableDataChanged();
-                                } catch (SQLException ex) {
-                                    throw new RuntimeException(ex);
-                                }
+                                JDBCUtil.getClose(connection2, ps2, rs);
+                                defaultTableModel.fireTableDataChanged();
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "添加失败");
                         }
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        JDBCUtil.getClose(connection, ps, null);
                     }
-
-
                 }
             }
         });
         add(panel);
-        setVisible(true);//显示模态对话框
+        setVisible(true); // 显示模态对话框
     }
 
     // 将所有文本框和单选按钮恢复到初始状态的reset()方法

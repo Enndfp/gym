@@ -10,17 +10,20 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * @author Enndfp
  * @date 2023/3/11
  */
 public class AdminView extends JFrame {
-    //选项卡容器
+    // 选项卡容器
     private JTabbedPane option;
 
     public AdminView() {
-        option = new JTabbedPane(JTabbedPane.LEFT); //指定JTabbedPane靠左
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); // 防止点击关闭页面 隐藏界面
+        option = new JTabbedPane(JTabbedPane.LEFT); // 指定JTabbedPane靠左
 
         JPanel mainView = new MainView();
         option.add("主界面", mainView);
@@ -38,42 +41,47 @@ public class AdminView extends JFrame {
         option.add("课程管理", courseManagementView);
 
         // 修改选项卡的属性
-        option.setTabPlacement(JTabbedPane.LEFT);
-        option.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         option.setFont(new Font("宋体", Font.BOLD, 20));
         option.setBackground(Color.CYAN);
 
-        option.setUI(new BasicTabbedPaneUI(){
+        // 自定义选项卡外观和行为
+        option.setUI(new BasicTabbedPaneUI() {
+            // 增加选项卡高度
             @Override
             protected int calculateTabHeight(int tabPlacement, int tabIndex, int fontHeight) {
-                return super.calculateTabHeight(tabPlacement, tabIndex, fontHeight)+20;
+                return super.calculateTabHeight(tabPlacement, tabIndex, fontHeight) + 20;
             }
 
+            // 增加选项卡宽度
             @Override
             protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) {
-                return super.calculateTabWidth(tabPlacement, tabIndex, metrics)+30;
+                return super.calculateTabWidth(tabPlacement, tabIndex, metrics) + 30;
             }
 
+            // 根据是否被选中来设置不同的背景颜色
             @Override
             protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
-                Color defaultColor =new Color(0,255,255);
-                Color selectedColor =new Color(255,165,0);
-                g.setColor(!isSelected?defaultColor:selectedColor);
-                g.fillRect(x,y,w,h);
+                Color defaultColor = new Color(0, 255, 255);
+                Color selectedColor = new Color(255, 165, 0);
+                g.setColor(!isSelected ? defaultColor : selectedColor);
+                g.fillRect(x, y, w, h);
             }
 
+            // 绘制选项卡的边框
             @Override
             protected void paintTabBorder(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
-                Color defaultColor =new Color(0,255,255);
-                Color selectedColor =new Color(255,165,0);
-                g.setColor(!isSelected?defaultColor:selectedColor);
-                g.fillRect(x,y,w,h);
-            }
-            protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex, Rectangle iconRect, Rectangle textRect, boolean isSelected) {
-                //这个方法定义如果没有的话，选项卡在选中时，内测会有虚线。
+                Color defaultColor = new Color(0, 255, 255);
+                Color selectedColor = new Color(255, 165, 0);
+                g.setColor(!isSelected ? defaultColor : selectedColor);
+                g.fillRect(x, y, w, h);
             }
 
-            protected LayoutManager createLayoutManager() {// 设置Layout
+            // 这个方法定义如果没有的话，选项卡在选中时，内测会有虚线
+            protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex, Rectangle iconRect, Rectangle textRect, boolean isSelected) {
+            }
+
+            // 自定义布局
+            protected LayoutManager createLayoutManager() {
                 return new TabbedPaneLayout();
             }
 
@@ -91,14 +99,9 @@ public class AdminView extends JFrame {
                     }
                 }
             }
+        });
 
-        });
-        option.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                getContentPane().requestFocusInWindow();
-            }
-        });
+        // 选项卡切换
         option.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -107,27 +110,34 @@ public class AdminView extends JFrame {
                     case 0:
                         break;
                     case 1:
-                        ((MemberManagementView)memberManagementView).updateContent();
+                        ((MemberManagementView) memberManagementView).updateContent();
                         break;
                     case 2:
-                        ((EmployeeManagementView)employeeManagementView).updateContent();
+                        ((EmployeeManagementView) employeeManagementView).updateContent();
                         break;
                     case 3:
-                        ((EquipmentManagementView)equipmentManagementView).updateContent();
+                        ((EquipmentManagementView) equipmentManagementView).updateContent();
                         break;
                     case 4:
-                        ((CourseManagementView)courseManagementView).updateContent();
+                        ((CourseManagementView) courseManagementView).updateContent();
                         break;
                 }
             }
         });
 
+        // 自定义退出操作
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                new LoginView();
+            }
+        });
+
         add(option);
         setTitle("管理员页面");
-        setSize(new Dimension(1020, 600));
+        setSize(1020,600);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
-
     }
 }

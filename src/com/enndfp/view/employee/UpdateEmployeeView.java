@@ -1,6 +1,7 @@
 package com.enndfp.view.employee;
 
 import com.enndfp.pojo.Employee;
+import com.enndfp.utils.JDBCUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -41,14 +42,14 @@ public class UpdateEmployeeView extends JDialog {
         setTitle("修改员工信息");
         setSize(400, 400);
         setLocationRelativeTo(null);
-        setModal(true);//设置为模式对话框
+        setModal(true); // 设置为模式对话框
 
         // 创建一个继承自JPanel的匿名类，并重写它的paintComponent方法来绘制背景图片
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image image = new ImageIcon("D:\\图片\\gym3.jpg").getImage(); // 背景图片路径
+                Image image = new ImageIcon("src/com/enndfp/image/editor.jpg").getImage(); // 背景图片路径
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -131,12 +132,12 @@ public class UpdateEmployeeView extends JDialog {
                     }
 
                     Connection connection = null;
+                    PreparedStatement ps = null;
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                        connection = JDBCUtil.getConnection();
                         String sql = "update employee set employee_account=?,employee_name=?,employee_gender=?,employee_age=?," +
                                 "staff=?,employee_message=? WHERE employee_account =?";
-                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps = connection.prepareStatement(sql);
                         ps.setString(1, employeeAccount);
                         ps.setString(2, employeeName);
                         ps.setString(3, employeeGender);
@@ -150,15 +151,16 @@ public class UpdateEmployeeView extends JDialog {
                             JOptionPane.showMessageDialog(null, "修改成功");
                             dispose();
 
-                            //刷新表数据
+                            // 刷新表数据
                             defaultTableModel.setRowCount(0);
                             Connection connection2 = null;
+                            PreparedStatement ps2 = null;
+                            ResultSet rs = null;
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                connection2 = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                                connection2 = JDBCUtil.getConnection();
                                 String sql2 = "SELECT * FROM employee";
-                                PreparedStatement ps2 = connection2.prepareStatement(sql2);
-                                ResultSet rs = ps2.executeQuery();
+                                ps2 = connection2.prepareStatement(sql2);
+                                rs = ps2.executeQuery();
                                 while (rs.next()) {
                                     // 将查询结果添加到表模型中
                                     defaultTableModel.addRow(new Object[]{
@@ -171,35 +173,24 @@ public class UpdateEmployeeView extends JDialog {
                                             rs.getString(7)
                                     });
                                 }
-                            } catch (ClassNotFoundException ex) {
-                                throw new RuntimeException(ex);
                             } catch (SQLException ex) {
                                 throw new RuntimeException(ex);
                             } finally {
-                                try {
-                                    connection2.close();
-                                    defaultTableModel.fireTableDataChanged();
-                                } catch (SQLException ex) {
-                                    throw new RuntimeException(ex);
-                                }
+                                JDBCUtil.getClose(connection2, ps2, rs);
+                                defaultTableModel.fireTableDataChanged();
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "修改失败");
                         }
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        JDBCUtil.getClose(connection, ps, null);
                     }
                 }
             }
         });
+
         add(panel);
         setVisible(true);
     }

@@ -1,5 +1,7 @@
 package com.enndfp.view.employee;
 
+import com.enndfp.utils.JDBCUtil;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,7 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -51,14 +56,14 @@ public class AddEmployeeView extends JDialog {
         setTitle("添加员工信息");
         setSize(400, 390);
         setLocationRelativeTo(null);
-        setModal(true);//设置为模式对话框
+        setModal(true); // 设置为模式对话框
 
         // 创建一个继承自JPanel的匿名类，并重写它的paintComponent方法来绘制背景图片
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image image = new ImageIcon("D:\\图片\\gym3.jpg").getImage(); // 背景图片路径
+                Image image = new ImageIcon("src/com/enndfp/image/editor.jpg").getImage(); // 背景图片路径
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -90,7 +95,7 @@ public class AddEmployeeView extends JDialog {
         ButtonGroup buttonGroup = new ButtonGroup();//逻辑分组
         buttonGroup.add(maleButton);
         buttonGroup.add(femaleButton);
-        maleButton.setSelected(true);//把"男"设置为选中
+        maleButton.setSelected(true); //把"男"设置为选中
 
         employeeAgeLabel.setBounds(100, 160, 60, 20);
         panel.add(employeeAgeLabel);
@@ -227,7 +232,7 @@ public class AddEmployeeView extends JDialog {
             }
         });
 
-        //给添加按钮绑定监听事件，添加员工信息
+        // 给添加按钮绑定监听事件，添加员工信息
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -247,7 +252,7 @@ public class AddEmployeeView extends JDialog {
                         employeeGender = "女";
                     }
 
-                    //卡号随机生成
+                    // 卡号随机生成
                     String employeeAccount = "1010";
                     UUID uuid = UUID.randomUUID();
                     int hashCode = uuid.hashCode();
@@ -260,18 +265,18 @@ public class AddEmployeeView extends JDialog {
                     employeeAccount += fiveDigitCode;
 
 
-                    //获取当前日期
+                    // 获取当前日期
                     Date date = new Date();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String entryTime = simpleDateFormat.format(date);
 
                     Connection connection = null;
+                    PreparedStatement ps = null;
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        connection = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                        connection = JDBCUtil.getConnection();
                         String sql = "insert into employee values(?,?,?,?,?,?,?)";
 
-                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps = connection.prepareStatement(sql);
                         ps.setString(1, employeeAccount);
                         ps.setString(2, employeeName);
                         ps.setString(3, employeeGender);
@@ -285,15 +290,16 @@ public class AddEmployeeView extends JDialog {
                             JOptionPane.showMessageDialog(null, "添加成功");
                             dispose();
 
-                            //刷新表数据
+                            // 刷新表数据
                             defaultTableModel.setRowCount(0);
                             Connection connection2 = null;
+                            PreparedStatement ps2 = null;
+                            ResultSet rs = null;
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                connection2 = DriverManager.getConnection("jdbc:mysql:///gym", "root", "123456");
+                                connection2 = JDBCUtil.getConnection();
                                 String sql2 = "SELECT * FROM employee";
-                                PreparedStatement ps2 = connection2.prepareStatement(sql2);
-                                ResultSet rs = ps2.executeQuery();
+                                ps2 = connection2.prepareStatement(sql2);
+                                rs = ps2.executeQuery();
                                 while (rs.next()) {
                                     // 将查询结果添加到表模型中
                                     defaultTableModel.addRow(new Object[]{
@@ -306,34 +312,20 @@ public class AddEmployeeView extends JDialog {
                                             rs.getString(7)
                                     });
                                 }
-                            } catch (ClassNotFoundException ex) {
-                                throw new RuntimeException(ex);
                             } catch (SQLException ex) {
                                 throw new RuntimeException(ex);
                             } finally {
-                                try {
-                                    connection2.close();
-                                    defaultTableModel.fireTableDataChanged();
-                                } catch (SQLException ex) {
-                                    throw new RuntimeException(ex);
-                                }
+                                JDBCUtil.getClose(connection2, ps2, rs);
+                                defaultTableModel.fireTableDataChanged();
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "添加失败");
                         }
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     } finally {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        JDBCUtil.getClose(connection, ps, null);
                     }
-
-
                 }
             }
         });
