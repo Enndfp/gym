@@ -10,13 +10,17 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.EventObject;
 import java.util.Vector;
 
 /**
+ * 选课界面
+ *
  * @author Enndfp
- * @date 2023/3/19
  */
 public class ChooseCourseView extends JPanel {
     // 滚动面板

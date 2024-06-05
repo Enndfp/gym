@@ -1,16 +1,16 @@
 package com.enndfp.utils;
 
-/**
- * @author Enndfp
- * @date 2023/3/18
- */
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 
+/**
+ * 时间选择器
+ *
+ * @author Enndfp
+ */
 public class JTimeChooser extends JDialog implements ActionListener {
     private static final long serialVersionUID = -3758522951261503946L;
 
@@ -39,7 +39,7 @@ public class JTimeChooser extends JDialog implements ActionListener {
     // 时分秒
     private int hour, minute, second;
     private JPanel panel = null;
-    private String tits[] = { "日", "一", "二", "三", "四", "五", "六" };
+    private String tits[] = {"日", "一", "二", "三", "四", "五", "六"};
     // 时,分,秒下拉列表框
     private JComboBox comboBox3 = null;
     private JComboBox comboBox4 = null;
@@ -55,8 +55,7 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
+     * @param parent 父组件
      * @wbp.parser.constructor
      */
     public JTimeChooser(Dialog parent) {
@@ -70,10 +69,8 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param title
-     *            标题
+     * @param parent 父组件
+     * @param title  标题
      */
     public JTimeChooser(Dialog parent, String title) {
         super(parent, title, true);
@@ -86,12 +83,9 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param title
-     *            标题
-     * @param location
-     *            组件显示的位置
+     * @param parent   父组件
+     * @param title    标题
+     * @param location 组件显示的位置
      */
     public JTimeChooser(Dialog parent, String title, Point location) {
         super(parent, title, true);
@@ -105,16 +99,12 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param title
-     *            标题
-     * @param location
-     *            组件显示的位置
-     * @param showYears
-     *            显示的年数值,默认为显示100年,即前后50年<br>
-     *            比如 当前年份为2010年,参数showYears为30年,则界面显示的年份下拉框值从1995-2024<br>
-     *            注意: 若showYears值必须大于0,否则使用默认年数值
+     * @param parent    父组件
+     * @param title     标题
+     * @param location  组件显示的位置
+     * @param showYears 显示的年数值,默认为显示100年,即前后50年<br>
+     *                  比如 当前年份为2010年,参数showYears为30年,则界面显示的年份下拉框值从1995-2024<br>
+     *                  注意: 若showYears值必须大于0,否则使用默认年数值
      */
     public JTimeChooser(Dialog parent, String title, Point location, int showYears) {
         super(parent, title, true);
@@ -131,8 +121,7 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
+     * @param parent 父组件
      */
     public JTimeChooser(Frame parent) {
         super(parent, true);
@@ -146,10 +135,8 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param location
-     *            界面显示的位置坐标
+     * @param parent   父组件
+     * @param location 界面显示的位置坐标
      */
     public JTimeChooser(Frame parent, Point location) {
         super(parent, true);
@@ -164,12 +151,9 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param title
-     *            标题
-     * @param location
-     *            界面显示的位置坐标
+     * @param parent   父组件
+     * @param title    标题
+     * @param location 界面显示的位置坐标
      */
     public JTimeChooser(Frame parent, String title, Point location) {
         super(parent, title, true);
@@ -183,16 +167,12 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param title
-     *            标题
-     * @param location
-     *            界面显示的位置坐标
-     * @param showYears
-     *            显示的年数值,默认为显示100年,即前后50年<br>
-     *            比如 当前年份为2010年,参数showYears为30年,则界面显示的年份下拉框值从1995-2024<br>
-     *            注意: 若showYears值必须大于0,否则使用默认年数值
+     * @param parent    父组件
+     * @param title     标题
+     * @param location  界面显示的位置坐标
+     * @param showYears 显示的年数值,默认为显示100年,即前后50年<br>
+     *                  比如 当前年份为2010年,参数showYears为30年,则界面显示的年份下拉框值从1995-2024<br>
+     *                  注意: 若showYears值必须大于0,否则使用默认年数值
      */
     public JTimeChooser(Frame parent, String title, Point location, int showYears) {
         super(parent, title, true);
@@ -209,10 +189,8 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param location
-     *            界面显示的位置坐标
+     * @param parent   父组件
+     * @param location 界面显示的位置坐标
      */
     public JTimeChooser(Dialog parent, Point location) {
         super(parent, true);
@@ -227,10 +205,8 @@ public class JTimeChooser extends JDialog implements ActionListener {
      * 构造器<br>
      * 在创建对象后调用showTimeDialog()方法获取选择的时间值
      *
-     * @param parent
-     *            父组件
-     * @param title
-     *            标题
+     * @param parent 父组件
+     * @param title  标题
      */
     public JTimeChooser(Frame parent, String title) {
         super(parent, title, true);
@@ -271,10 +247,8 @@ public class JTimeChooser extends JDialog implements ActionListener {
     /**
      * 根据界面的长度与宽度确定界面的左上角坐标值
      *
-     * @param width
-     *            长度
-     * @param height
-     *            宽度
+     * @param width  长度
+     * @param height 宽度
      * @return
      */
     private Dimension getStartDimension(int width, int height) {

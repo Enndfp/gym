@@ -7,14 +7,18 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * 添加课程信息界面
+ *
  * @author Enndfp
- * @date 2023/3/18
  */
 public class AddCourseView extends JDialog {
     private static final String DEFAULT_NAME = "课程名称";

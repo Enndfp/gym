@@ -10,7 +10,10 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,9 +23,9 @@ import java.util.EventObject;
 import java.util.Vector;
 
 /**
- * @author Enndfp
- * @date 2023/3/12
  * 课程管理界面
+ *
+ * @author Enndfp
  */
 public class CourseManagementView extends JPanel {
     // 滚动面板

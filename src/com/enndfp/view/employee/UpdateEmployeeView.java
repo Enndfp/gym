@@ -8,11 +8,15 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
+ * 修改员工信息界面
+ *
  * @author Enndfp
- * @date 2023/3/17
  */
 public class UpdateEmployeeView extends JDialog {
 

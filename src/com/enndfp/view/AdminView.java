@@ -14,8 +14,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
+ * 管理员页面
+ *
  * @author Enndfp
- * @date 2023/3/11
  */
 public class AdminView extends JFrame {
     // 选项卡容器
@@ -136,7 +137,7 @@ public class AdminView extends JFrame {
 
         add(option);
         setTitle("管理员页面");
-        setSize(1020,600);
+        setSize(1020, 600);
         setLocationRelativeTo(null);
         setVisible(true);
     }

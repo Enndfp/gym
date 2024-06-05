@@ -1,6 +1,5 @@
 package com.enndfp.view.course;
 
-import com.enndfp.pojo.Course;
 import com.enndfp.utils.JDBCUtil;
 
 import javax.swing.*;
@@ -11,7 +10,10 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,8 +22,9 @@ import java.util.EventObject;
 import java.util.Vector;
 
 /**
+ * 会员选课界面
+ *
  * @author Enndfp
- * @date 2023/3/19
  */
 public class MemberCourseView extends JPanel {
     // 滚动面板

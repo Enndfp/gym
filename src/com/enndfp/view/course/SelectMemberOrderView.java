@@ -9,8 +9,9 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
+ * 查看报名信息界面
+ *
  * @author Enndfp
- * @date 2023/3/18
  */
 public class SelectMemberOrderView extends JDialog {
     // 滚动面板
@@ -27,7 +28,7 @@ public class SelectMemberOrderView extends JDialog {
     private JLabel classBeginLabel = new JLabel("开课时间");
     private JTextField classBeginField = new JTextField();
 
-    public SelectMemberOrderView(Course course,Vector<Vector<String>> dataVector){
+    public SelectMemberOrderView(Course course, Vector<Vector<String>> dataVector) {
         setTitle("查看报名信息");
         setSize(400, 480);
         setLocationRelativeTo(null);
@@ -69,7 +70,7 @@ public class SelectMemberOrderView extends JDialog {
         panel.add(classBeginLabel);
         classBeginField.setBounds(150, 120, 150, 20);
         classBeginField.setText(course.getClassBegin());
-        classBeginField.setFont(new Font("黑体",Font.BOLD,12));
+        classBeginField.setFont(new Font("黑体", Font.BOLD, 12));
         classBeginField.setMargin(new Insets(0, 8, 0, 0));
         classBeginField.setEditable(false);
         panel.add(classBeginField);

@@ -5,9 +5,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
+ * 主界面视图
+ *
  * @author Enndfp
- * @date 2023/3/12
- * 主界面
  */
 public class MainView extends JPanel {
     private JLabel label;

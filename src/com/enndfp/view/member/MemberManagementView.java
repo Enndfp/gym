@@ -10,14 +10,17 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.EventObject;
 import java.util.Vector;
 
 /**
- * @author Enndfp
- * @date 2023/3/11
  * 会员管理界面
+ *
+ * @author Enndfp
  */
 public class MemberManagementView extends JPanel {
     // 滚动面板，根据内容大小自动判断是否显示滚动条

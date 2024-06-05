@@ -10,14 +10,17 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.EventObject;
 import java.util.Vector;
 
 /**
+ * 员工管理界面
+ *
  * @author Enndfp
- * @date 2023/3/12
- * 员工管理
  */
 public class EmployeeManagementView extends JPanel {
     // 滚动面板
@@ -222,7 +225,7 @@ public class EmployeeManagementView extends JPanel {
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } finally {
-                    JDBCUtil.getClose(connection,ps,rs);
+                    JDBCUtil.getClose(connection, ps, rs);
                 }
 
                 // 构建表模型

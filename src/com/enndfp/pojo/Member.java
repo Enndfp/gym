@@ -1,8 +1,9 @@
 package com.enndfp.pojo;
 
 /**
+ * 会员实体类
+ *
  * @author Enndfp
- * @date 2023/3/11
  */
 public class Member {
     /**

@@ -15,9 +15,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
+ * 修改会员信息界面
+ *
  * @author Enndfp
- * @date 2023/3/20
- * 会员修改个人信息
  */
 public class ModifyMemberView extends JDialog {
     private static final Font DEFAULT_FONT = new Font("黑体", Font.BOLD, 15);

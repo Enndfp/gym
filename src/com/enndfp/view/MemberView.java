@@ -1,12 +1,8 @@
 package com.enndfp.view;
 
 import com.enndfp.view.course.ChooseCourseView;
-import com.enndfp.view.course.CourseManagementView;
 import com.enndfp.view.course.MemberCourseView;
-import com.enndfp.view.employee.EmployeeManagementView;
-import com.enndfp.view.equipment.EquipmentManagementView;
 import com.enndfp.view.member.MemberInfoView;
-import com.enndfp.view.member.MemberManagementView;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -15,9 +11,9 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.*;
 
 /**
+ * 会员页面
+ *
  * @author Enndfp
- * @date 2023/3/10
- * 会员用户界面
  */
 public class MemberView extends JFrame {
     // 选项卡容器

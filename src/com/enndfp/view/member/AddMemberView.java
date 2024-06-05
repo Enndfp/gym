@@ -18,9 +18,9 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
+ * 添加会员信息界面
+ *
  * @author Enndfp
- * @date 2023/3/13
- * 添加会员界面
  */
 public class AddMemberView extends JDialog {
     // 定义所有文本框和单选按钮的初始提示文字和默认属性

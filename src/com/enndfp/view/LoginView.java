@@ -11,9 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 登录页面
+ *
  * @author Enndfp
- * @date 2023/3/4
- * 登录界面
  */
 public class LoginView extends JFrame {
     private JLabel accountLabel = new JLabel("账号");
@@ -23,7 +23,7 @@ public class LoginView extends JFrame {
     private JPasswordField passwordField = new JPasswordField();
 
     private JButton memberButton = new JButton("会员登录");
-    private JButton loginButton = new JButton("登录");
+    private JButton loginButton = new JButton("管理员登录");
 
     public LoginView() {
         setTitle("星航健身房管理系统"); // 标题
@@ -57,7 +57,7 @@ public class LoginView extends JFrame {
         passwordField.setBounds(270, 160, 150, 25);
 
         memberButton.setBounds(160, 220, 100, 30);
-        loginButton.setBounds(320, 220, 100, 30);
+        loginButton.setBounds(300, 220, 120, 30);
 
         // 更改文本标签颜色
         accountLabel.setForeground(Color.ORANGE);

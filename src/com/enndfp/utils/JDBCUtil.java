@@ -4,6 +4,8 @@ import java.sql.*;
 
 /**
  * JDBC连接数据库工具类
+ *
+ * @author Enndfp
  */
 public class JDBCUtil {
     private static final String driverName = "com.mysql.cj.jdbc.Driver";

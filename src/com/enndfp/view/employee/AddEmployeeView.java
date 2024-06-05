@@ -18,8 +18,9 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
+ * 添加员工信息界面
+ *
  * @author Enndfp
- * @date 2023/3/17
  */
 public class AddEmployeeView extends JDialog {
     // 定义所有文本框和单选按钮的初始提示文字和默认属性

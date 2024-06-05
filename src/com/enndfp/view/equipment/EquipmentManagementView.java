@@ -15,9 +15,9 @@ import java.util.EventObject;
 import java.util.Vector;
 
 /**
+ * 器材管理界面
+ *
  * @author Enndfp
- * @date 2023/3/12
- * 器材管理
  */
 public class EquipmentManagementView extends JPanel {
     // 滚动面板

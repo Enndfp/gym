@@ -10,12 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
+ * 修改会员信息界面
+ *
  * @author Enndfp
- * @date 2023/3/15
- * 管理员修改会员界面
  */
 public class UpdateMemberView extends JDialog {
     private static final Font DEFAULT_FONT = new Font("黑体", Font.BOLD, 15);
